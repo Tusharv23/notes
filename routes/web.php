@@ -14,3 +14,7 @@
 Route::get('/', function () {
     return view('facebook');
 });
+Route::get('/upload',function(){
+	return view('upload');
+});
+Route::post('/upload',['as'=>'song.upload','uses'=>'SongController@update']);

@@ -30,18 +30,37 @@
 canvas{
   background-color: red;
   position: relative;
-  top: 180px;
+  top: 100px;
   height: 10%;
   width: 100%;
   border-radius: 30%;
   z-index: 1;
 
 }
+.song
+{
+  position: relative;
+  top: 20px;
+  width: 100px;
+  margin: auto;
+  display: block;
+  color: white;
+  font-size: 14px;
+  text-decoration: none;
+  margin-top: 15px;
+}
 
 </style>
 <body>
 
 <div id="mp3_player">
+<div class="playlist" >
+  <a href="" id="1.mp4" class="song">Song 1</a>
+<a href="#" id="2.mp4" class="song">Song 2</a>
+<a href="#" id="3.mp4" class="song">Song 3</a>
+<a href="#" id="4.mp4" class="song">Song 4</a>
+<a href="#" id="5.mp3" class="song">Song 5</a>
+</div>
 <div id="audio_box">
   
 </div>
@@ -49,23 +68,34 @@ canvas{
   </div>
 </body>
 <script>
+var canvas, ctx, source, context, analyser, fbc_array, bars, bar_x, bar_width, bar_height;
 
-$("#mp3_player").hover(alert("hello"));
+$(".song").click(function(e){
 
-var song = "1.mp4";
-// Create a new instance of an audio object and adjust some of its properties
-var audio = new Audio();
+      e.preventDefault();
+      
+      
+      $("#audio_box").empty();
+      var song = $(this).attr('id');
+
+      var audio = new Audio();
 audio.src = song;
 audio.controls = true;
 audio.loop = true;
-audio.autoplay = false;
+audio.autoplay = true;
+    initMp3Player(audio); 
+
+});
+
+// Create a new instance of an audio object and adjust some of its properties
+
 // Establish all variables that your Analyser will use
-var canvas, ctx, source, context, analyser, fbc_array, bars, bar_x, bar_width, bar_height;
+
 // Initialize the MP3 player after the page loads all of its HTML into the window
 
-function initMp3Player(){
+function initMp3Player(audio){
 	document.getElementById('audio_box').appendChild(audio);
-	context = new webkitAudioContext(); // AudioContext object instance
+	context = new AudioContext(); // AudioContext object instance
 	analyser = context.createAnalyser(); // AnalyserNode method
 	canvas = document.getElementById('analyser_render');
 	ctx = canvas.getContext('2d');
@@ -78,7 +108,7 @@ function initMp3Player(){
 // frameLooper() animates any style of graphics you wish to the audio frequency
 // Looping at the default frame rate that the browser provides(approx. 60 FPS)
 function frameLooper(){
-	window.webkitRequestAnimationFrame(frameLooper);
+	window.requestAnimationFrame(frameLooper);
 	fbc_array = new Uint8Array(analyser.frequencyBinCount);
 	analyser.getByteFrequencyData(fbc_array);
 	ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
