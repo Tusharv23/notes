@@ -55,6 +55,7 @@ canvas{
 
 <div id="mp3_player">
 <div class="playlist" >
+<div id="timer"></div>
   <a href="" id="1.mp4" class="song">Song 1</a>
 <a href="#" id="2.mp4" class="song">Song 2</a>
 <a href="#" id="3.mp4" class="song">Song 3</a>
@@ -65,6 +66,9 @@ canvas{
   
 </div>
   <canvas id="analyser_render"></canvas> 
+  </div>
+  <div id="seeker" style="height: 100px; width: 500px; background-color: #f4f4f4; margin: auto; z-index: 1" >
+    <div id="dynamic" style="height: 100px; width: 20px; z-index: 2; background-color: blue;"></div>
   </div>
 </body>
 <script>
@@ -99,11 +103,29 @@ audio.controls = true;
 audio.loop = false;
 audio.autoplay = true;
     initMp3Player(audio); 
+    seeker(audio);
      }
 
 });
 
+function visual(audio)
+{
+  var current = audio.currentTime;
+  var length = audio.duration;
+  var width = $("#seeker").css('width');
+  var diff = 500 / length;
+  current = diff*current;
+  $("#dynamic").animate({
+        width: current,
+      },500,function(){});
+}
 
+function seeker(audio)
+{
+  audio.ontimeupdate= function(){
+    visual(audio)
+  };
+}
 
 function initMp3Player(audio){
    $("#audio_box").empty();
@@ -116,14 +138,19 @@ function initMp3Player(audio){
 	source = context.createMediaElementSource(audio); 
 	source.connect(analyser);
 	analyser.connect(context.destination);
+
 	frameLooper();
   var aud = audio;
+
+
+ 
   aud.onended = function(){
     $("#analyser_render").animate({
         height: "1px"
       },500,function(){});
      
   }
+
      
 }
 
@@ -132,7 +159,8 @@ function frameLooper(){
 	fbc_array = new Uint8Array(analyser.frequencyBinCount);
 	analyser.getByteFrequencyData(fbc_array);
 	ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
-	ctx.fillStyle = '#000000'; // Color of the bars
+	ctx.fillStyle = '#000000'; 
+  // Color of the bars
 	bars = 100;
 	for (var i = 0; i < bars; i++) {
 		bar_x = i * 3;
@@ -143,6 +171,8 @@ function frameLooper(){
 	}
  
 }
+
+
 
 
 </script>
