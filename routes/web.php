@@ -17,4 +17,4 @@ Route::get('/', function () {
 Route::get('/upload',function(){
 	return view('upload');
 });
-Route::post('/upload',['as'=>'song.upload','uses'=>'SongController@update']);
+Route::post('/uploadfile',['as'=>'song.upload','uses'=>'SongController@update']);

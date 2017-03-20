@@ -21,19 +21,19 @@
   background-color: blue;
   margin: auto;
   width: 300px;
-  top: 225px;
+  top: 55px;
   z-index: 2;
   position: relative;
-  opacity: 0.4;
- 
+  opacity: 0.7;
+ display: none;
 }
 canvas{
   background-color: red;
-  position: relative;
-  top: 100px;
-  height: 10%;
-  width: 100%;
-  border-radius: 30%;
+ position: fixed;
+  top: 200px;
+  height: 1px;
+  width: 500px;
+  border-radius: 20%;
   z-index: 1;
 
 }
@@ -68,34 +68,47 @@ canvas{
   </div>
 </body>
 <script>
+$("#analyser_render,#audio_box").mouseenter(function(){
+  $("#audio_box").fadeIn(100);
+});
+$("#analyser_render,#audio_box").mouseleave(function(){
+  $("#audio_box").fadeOut(100);
+});
 var canvas, ctx, source, context, analyser, fbc_array, bars, bar_x, bar_width, bar_height;
+context = new AudioContext(); 
+
 
 $(".song").click(function(e){
 
       e.preventDefault();
+      $("#analyser_render").animate({
+        height: "50px",
+        
+
+      },500,function(){});
+      var song;
       
-      
-      $("#audio_box").empty();
+     if($(this).attr('id') !== song)
+     {
+
       var song = $(this).attr('id');
 
-      var audio = new Audio();
+var audio = new Audio();      
 audio.src = song;
 audio.controls = true;
-audio.loop = true;
+audio.loop = false;
 audio.autoplay = true;
     initMp3Player(audio); 
+     }
 
 });
 
-// Create a new instance of an audio object and adjust some of its properties
 
-// Establish all variables that your Analyser will use
-
-// Initialize the MP3 player after the page loads all of its HTML into the window
 
 function initMp3Player(audio){
-	document.getElementById('audio_box').appendChild(audio);
-	context = new AudioContext(); // AudioContext object instance
+   $("#audio_box").empty();
+	$('#audio_box').append(audio);
+	// AudioContext object instance
 	analyser = context.createAnalyser(); // AnalyserNode method
 	canvas = document.getElementById('analyser_render');
 	ctx = canvas.getContext('2d');
@@ -104,9 +117,16 @@ function initMp3Player(audio){
 	source.connect(analyser);
 	analyser.connect(context.destination);
 	frameLooper();
+  var aud = audio;
+  aud.onended = function(){
+    $("#analyser_render").animate({
+        height: "1px"
+      },500,function(){});
+     
+  }
+     
 }
-// frameLooper() animates any style of graphics you wish to the audio frequency
-// Looping at the default frame rate that the browser provides(approx. 60 FPS)
+
 function frameLooper(){
 	window.requestAnimationFrame(frameLooper);
 	fbc_array = new Uint8Array(analyser.frequencyBinCount);
@@ -121,7 +141,6 @@ function frameLooper(){
 		//  fillRect( x, y, width, height ) // Explanation of the parameters below
 		ctx.fillRect(bar_x, canvas.height, bar_width, bar_height);
 	}
-
  
 }
 
