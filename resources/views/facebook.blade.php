@@ -29,11 +29,11 @@
 }
 canvas{
   background-color: red;
- position: fixed;
+ position: absolute;
   top: 200px;
   height: 1px;
   width: 500px;
-  border-radius: 20%;
+  border-radius: 0%;
   z-index: 1;
 
 }
@@ -49,11 +49,29 @@ canvas{
   text-decoration: none;
   margin-top: 15px;
 }
+#dynamic{
+  
+ 
+    height: 50px; 
+    width: 0px; 
+    z-index: 4; 
+    background-color: blue;
+    opacity: 0.5;
+}
+#seeker
+{
+  background-color: transparent;
+  width: 500px;
+  height: 50px;
+  position: relative;
+  top: 0px;
+}
 
 </style>
 <body>
 
 <div id="mp3_player">
+<a href="#" ><div id="seeker"><div id="dynamic" ></div></div></a>
 <div class="playlist" >
 <div id="timer"></div>
   <a href="" id="1.mp4" class="song">Song 1</a>
@@ -67,9 +85,9 @@ canvas{
 </div>
   <canvas id="analyser_render"></canvas> 
   </div>
-  <div id="seeker" style="height: 100px; width: 500px; background-color: #f4f4f4; margin: auto; z-index: 1" >
-    <div id="dynamic" style="height: 100px; width: 20px; z-index: 2; background-color: blue;"></div>
-  </div>
+  
+    
+
 </body>
 <script>
 $("#analyser_render,#audio_box").mouseenter(function(){
@@ -82,10 +100,16 @@ var canvas, ctx, source, context, analyser, fbc_array, bars, bar_x, bar_width, b
 context = new AudioContext(); 
 
 
+
 $(".song").click(function(e){
 
       e.preventDefault();
       $("#analyser_render").animate({
+        height: "50px",
+        
+
+      },500,function(){});
+       $("#dynamic").animate({
         height: "50px",
         
 
@@ -103,21 +127,25 @@ audio.controls = true;
 audio.loop = false;
 audio.autoplay = true;
     initMp3Player(audio); 
-    seeker(audio);
+   
+   
      }
 
 });
 
-function visual(audio)
+function visual(audio,time)
 {
-  var current = audio.currentTime;
   var length = audio.duration;
-  var width = $("#seeker").css('width');
   var diff = 500 / length;
+  
+   
+  
+  var current = audio.currentTime;
+  
   current = diff*current;
   $("#dynamic").animate({
         width: current,
-      },500,function(){});
+      },0.1,"linear",function(){});
 }
 
 function seeker(audio)
@@ -130,6 +158,7 @@ function seeker(audio)
 function initMp3Player(audio){
    $("#audio_box").empty();
 	$('#audio_box').append(audio);
+  $(audio).attr('id','current');
 	// AudioContext object instance
 	analyser = context.createAnalyser(); // AnalyserNode method
 	canvas = document.getElementById('analyser_render');
@@ -140,6 +169,7 @@ function initMp3Player(audio){
 	analyser.connect(context.destination);
 
 	frameLooper();
+   seeker(audio);
   var aud = audio;
 
 
@@ -148,7 +178,9 @@ function initMp3Player(audio){
     $("#analyser_render").animate({
         height: "1px"
       },500,function(){});
-     
+      $("#dynamic").animate({
+        height: "0px"
+      },500,function(){});
   }
 
      
@@ -168,11 +200,20 @@ function frameLooper(){
 		bar_height = -(fbc_array[i] / 2);
 		//  fillRect( x, y, width, height ) // Explanation of the parameters below
 		ctx.fillRect(bar_x, canvas.height, bar_width, bar_height);
+
 	}
  
 }
 
+$("#seeker").click(function(e){
 
+  var f = $("#analyser_render").offset().left;
+  var pos = e.pageX - f;
+  
+   pos = pos/diff;
+      audio.currentTime = time;
+
+});
 
 
 </script>
