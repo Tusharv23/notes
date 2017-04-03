@@ -13,7 +13,7 @@ class SongController extends Controller
     	
     	
     	$file = $request->file('song');
-    	$file->move('public',$file->getClientOriginalName());
+    	$file->move('upload',$file->getClientOriginalName());
     	echo('hogya');
 
     	

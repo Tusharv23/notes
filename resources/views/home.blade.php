@@ -1,3 +1,4 @@
+@include('layouts.app')
 <!DOCTYPE html>
 <html>
 <head>
@@ -27,11 +28,11 @@
   opacity: 0.7;
  display: none;
 }
-canvas{
+#analyser_render{
   background-color: red;
- position: absolute;
-  top: 200px;
-  height: 1px;
+ 
+ 
+  height: 0px;
   width: 500px;
   border-radius: 0%;
   z-index: 1;
@@ -63,15 +64,15 @@ canvas{
   background-color: transparent;
   width: 500px;
   height: 50px;
-  position: relative;
-  top: 0px;
+  
 }
 
 </style>
 <body>
 
+
 <div id="mp3_player">
-<a href="#" ><div id="seeker"><div id="dynamic" ></div></div></a>
+
 <div class="playlist" >
 <div id="timer"></div>
   <a href="" id="1.mp4" class="song">Song 1</a>
@@ -83,11 +84,22 @@ canvas{
 <div id="audio_box">
   
 </div>
-  <canvas id="analyser_render"></canvas> 
+  
   </div>
   
-    
-
+ <div id="visualiser">
+   <a href="#" >
+    <div id="seeker">
+      <div id="dynamic" >
+        
+      </div>
+    </div>
+  </a>   
+<canvas id="analyser_render">
+  
+</canvas> 
+ </div>
+ 
 </body>
 <script>
 $("#analyser_render,#audio_box").mouseenter(function(){
@@ -209,9 +221,11 @@ $("#seeker").click(function(e){
 
   var f = $("#analyser_render").offset().left;
   var pos = e.pageX - f;
-  
+  var audio = document.getElementById('current')
+  var length = audio.duration;
+  var diff = 500 / length;
    pos = pos/diff;
-      audio.currentTime = time;
+      audio.currentTime = pos;
 
 });
 

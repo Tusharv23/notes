@@ -11,10 +11,21 @@
 |
 */
 
-Route::get('/', function () {
-    return view('facebook');
+
+
+Auth::routes();
+
+
+
+Route::get('/chat','ChatController@index')->middleware('auth');
+Route::post('/sendmessage','ChatController@sendMessage');
+Route::get('/home',function(){
+	return view('home');
 });
-Route::get('/upload',function(){
-	return view('upload');
-});
-Route::post('/uploadfile',['as'=>'song.upload','uses'=>'SongController@update']);
+Route::get('/retrieve','ChatController@retrieve');
+
+// Route::post('/chat','ChatController@sendMessage');
+// Route::post('/typing','ChatController@typing');
+// Route::post('/nottyping','ChatController@nottyping');
+// Route::post('/retrieveChatMessage','ChatController@retrieveChatMessage');
+// Route::post('/retrieveTypingStatus','ChatController@retrieveTypingStatus');
