@@ -74,6 +74,9 @@
                                     <li>
                                         <a href="/chat">Chat</a>
                                     </li>
+                                    <li>
+                                        <a href="https://api.instagram.com/oauth/authorize/?client_id=9f948ad147ae4f899a0b90006ca079a7&redirect_uri=http://myproject.app/instafeed/&response_type=token&scope=basic+likes+comments+relationships+public_content">InstaFeed</a>
+                                    </li>
                                 </ul>
                             </li>
                         @endif
@@ -89,3 +92,4 @@
     <script src="{{ asset('js/app.js') }}"></script>
 </body>
 </html>
+276656760.9f948ad.f473dda3b17747fbb8bf7f4f93c2055e

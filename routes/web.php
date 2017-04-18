@@ -29,3 +29,14 @@ Route::get('/retrieve','ChatController@retrieve');
 // Route::post('/nottyping','ChatController@nottyping');
 // Route::post('/retrieveChatMessage','ChatController@retrieveChatMessage');
 // Route::post('/retrieveTypingStatus','ChatController@retrieveTypingStatus');
+
+Route::get('/instafeed/',['uses'=>'InstaController@feed','as'=>'instafeed'])->middleware('auth');
+// Route::post('/instafeed',['uses'=>'InstaController@feed','as'=>'instafeed'])->middleware('auth');
+Route::get('/event',function(){
+	event(new MessageRegistered(new App\Message([
+			'text'=>'sucker', 
+			'sender_name'=>'tushar',
+			'receiver_name'=>'rohan'
+		])));
+});
+Route::get('/send','MailController@send');
