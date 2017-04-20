@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use App\User;
+use Database\migrations\previousUser;
 
 class CreateUsersTable extends Migration
 {
@@ -30,6 +32,9 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
+        $user = User::all()->get();
+        $previousUser = new previousUser;
+        $previousUser->store($user);
         Schema::dropIfExists('users');
     }
 }
